@@ -28,6 +28,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
+import javax.jcr.RepositoryException;
 import javax.servlet.ServletContext;
 
 import org.exoplatform.container.ExoContainer;
@@ -38,6 +39,8 @@ import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.mop.EventType;
 import org.exoplatform.portal.pc.ExoKernelIntegration;
 import org.exoplatform.portal.pom.config.POMSessionManager;
+import org.exoplatform.services.jcr.RepositoryService;
+import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator;
 import org.exoplatform.services.listener.ListenerService;
 import org.gatein.common.logging.Logger;
@@ -110,11 +113,14 @@ public class WSRPServiceIntegration implements Startable, WebAppListener {
     private final boolean bypass;
     private static final String WSRP_ADMIN_GUI_CONTEXT_PATH = "/wsrp-admin-gui";
     private int consumersInitDelay;
+    private RepositoryService repositoryService;
 
     public WSRPServiceIntegration(ExoContainerContext context, InitParams params, ConfigurationManager configurationManager,
-            ExoKernelIntegration pc, NodeHierarchyCreator nhc, AS7Plugins plugins) throws Exception {
+            ExoKernelIntegration pc, NodeHierarchyCreator nhc, AS7Plugins plugins, RepositoryService repositoryService) throws Exception {
         // IMPORTANT: even though NodeHierarchyCreator is not used anywhere in the code, it's still needed for pico
         // to properly make sure that this service is started after the PC one. Yes, Pico is crap. :/
+
+        this.repositoryService = repositoryService;
 
         if ("portal".equals(context.getName())) {
             if (params != null) {
@@ -372,8 +378,17 @@ public class WSRPServiceIntegration implements Startable, WebAppListener {
             ServletContainer servletContainer = ServletContainerFactory.getServletContainer();
             servletContainer.removeWebAppListener(this);
 
-            stopProducer();
-            stopConsumers();
+            try {
+                if (repositoryService.getCurrentRepository() != null &&
+                        repositoryService.getCurrentRepository().getState() != ManageableRepository.OFFLINE) {
+                    stopProducer();
+                    stopConsumers();
+                } else {
+                    log.info("Unable to stop the producers and consumers, as the current repository is already offline.");
+                }
+            } catch (RepositoryException e) {
+                log.info("Couldn't get the state of the current repository.", e);
+            }
         }
     }
 

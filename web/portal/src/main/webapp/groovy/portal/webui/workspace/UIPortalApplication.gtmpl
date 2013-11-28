@@ -7,6 +7,7 @@
 	import java.util.Iterator;
 	import org.exoplatform.portal.webui.portal.UIPortal ;
 	import org.exoplatform.portal.config.model.PortalProperties ;
+	import org.exoplatform.commons.utils.PropertyManager ;
 	import org.json.JSONArray;
   import org.exoplatform.container.PortalContainer;
   import org.exoplatform.commons.utils.HTMLEntityEncoder;
@@ -56,7 +57,7 @@
 		 	<meta name="<%=metaName%>" content="<%=metaContent%>" />
 		<% } } %>
 		
-		<link rel="shortcut icon" type="image/x-icon" href="<%=docBase%>/favicon.ico" />
+		<link rel="shortcut icon" type="image/x-icon" href="<%=PropertyManager.getProperty("gatein.ui.favicon")%>" />
 		<%for(skinConfig in portalSkins) {
 		def url = skinConfig.createURL(rcontext.controllerContext);
 		url.setOrientation(orientation);

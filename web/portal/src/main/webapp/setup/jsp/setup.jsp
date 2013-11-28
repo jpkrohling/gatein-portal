@@ -26,6 +26,7 @@
 <%@ page import="org.exoplatform.container.PortalContainer"%>
 <%@ page import="org.exoplatform.services.resources.ResourceBundleService"%>
 <%@ page import="java.util.ResourceBundle"%>
+<%@ page import="org.exoplatform.commons.utils.PropertyManager"%>
 <%
 
   if (PortalSetupService.isSetup(request.getContextPath().substring(1))) {
@@ -51,6 +52,7 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>        
     <meta name="description" content="Password setup screen of the Portal"/>
     <meta name="viewport" content="initial-scale=1, maximum-scale=1"/>
+    <link rel="shortcut icon" type="image/x-icon" href="<%=PropertyManager.getProperty("gatein.ui.favicon")%>"/>
     <link rel="stylesheet" type="text/css" href="/portal/setup/css/default.css"/>
     <link rel="stylesheet" type="text/css" href="/portal/setup/css/enchanced.css"/>
     <!--[if lte IE 8]>

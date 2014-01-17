@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 import org.exoplatform.portal.mop.Described;
+import org.exoplatform.portal.mop.RestrictAccess;
 import org.exoplatform.portal.mop.Utils;
 import org.exoplatform.portal.mop.Visibility;
 import org.exoplatform.portal.mop.Visible;
@@ -92,6 +93,12 @@ class NodeData implements Serializable {
             endPublicationDate = visible.getEndPublicationDate();
         }
 
+        boolean restrictOutsidePublicationWindow = false;
+        if (navigation.isAdapted(RestrictAccess.class)) {
+            RestrictAccess restrictAccess = navigation.adapt(RestrictAccess.class);
+            restrictOutsidePublicationWindow = restrictAccess.isRestrictOutsidePublicationWindow();
+        }
+
         //
         PageKey pageRef = null;
         Link link = navigation.getLink();
@@ -110,7 +117,8 @@ class NodeData implements Serializable {
         //
         NodeState state = new NodeState(label, attrs.getValue(MappedAttributes.ICON),
                 startPublicationDate != null ? startPublicationDate.getTime() : -1,
-                endPublicationDate != null ? endPublicationDate.getTime() : -1, visibility, pageRef);
+                endPublicationDate != null ? endPublicationDate.getTime() : -1, visibility, pageRef,
+                restrictOutsidePublicationWindow);
 
         //
         String parentId;

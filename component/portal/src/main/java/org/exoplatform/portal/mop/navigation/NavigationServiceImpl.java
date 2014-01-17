@@ -31,7 +31,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.chromattic.api.ChromatticSession;
 import org.exoplatform.portal.mop.Described;
+import org.exoplatform.portal.mop.RestrictAccess;
 import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.mop.SiteType;
 import org.exoplatform.portal.mop.Utils;
@@ -591,6 +593,16 @@ public class NavigationServiceImpl implements NavigationService {
             //
             visible.setStartPublicationDate(state.getStartPublicationDate());
             visible.setEndPublicationDate(state.getEndPublicationDate());
+
+            //
+            if (sourceNav.isAdapted(RestrictAccess.class)) {
+                RestrictAccess restrictAccess = sourceNav.adapt(RestrictAccess.class);
+                restrictAccess.setRestrictOutsidePublicationWindow(state.isRestrictOutsidePublicationWindow());
+            } else {
+                ChromatticSession chromatticSession = session.getManager().getLifeCycle().getContext().getSession();
+                RestrictAccess restrictAccess = chromatticSession.create(RestrictAccess.class);
+                chromatticSession.setEmbedded(sourceNav, RestrictAccess.class, restrictAccess);
+            }
 
             //
             Attributes attrs = sourceNav.getAttributes();

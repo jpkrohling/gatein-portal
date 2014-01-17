@@ -134,7 +134,7 @@ public class UIPageActionListener {
                         messages.addMessage(message);
                         pcontext.sendRedirect(userPortal.getDefaultPath(navigation, builder.build()).getParent().getURI());
                         return;
-                    } else if (privateTillPublication && endPublicationTime < now) {
+                    } else if (privateTillPublication && endPublicationTime < now && endPublicationTime > 0) {
                         if (log.isInfoEnabled()) {
                             log.info("User "
                                     +pcontext.getRemoteUser()

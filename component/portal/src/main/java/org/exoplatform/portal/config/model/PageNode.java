@@ -24,6 +24,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.exoplatform.portal.mop.Visibility;
+import org.exoplatform.portal.mop.navigation.AttributesState;
 import org.exoplatform.portal.mop.navigation.NodeState;
 import org.exoplatform.portal.mop.page.PageKey;
 
@@ -54,7 +55,11 @@ public class PageNode extends PageNodeContainer {
     /** . */
     private String pageReference;
 
+    /** . */
     private boolean restrictOutsidePublicationWindow;
+
+    /** . */
+    private Properties properties;
 
     public PageNode() {
     }
@@ -163,11 +168,21 @@ public class PageNode extends PageNodeContainer {
         return getNode(name);
     }
 
+    public Properties getProperties() {
+        if (properties == null)
+            properties = new Properties();
+        return properties;
+    }
+
+    public void setProperties(Properties properties) {
+        this.properties = properties;
+    }
+
     public NodeState getState() {
         return new NodeState(labels.getSimple(), icon, startPublicationDate == null ? -1 : startPublicationDate.getTime(),
                 endPublicationDate == null ? -1 : endPublicationDate.getTime(), visibility,
                 pageReference != null ? PageKey.parse(pageReference) : null,
-                restrictOutsidePublicationWindow);
+                restrictOutsidePublicationWindow, new AttributesState.Builder(properties).build());
     }
 
     @Override

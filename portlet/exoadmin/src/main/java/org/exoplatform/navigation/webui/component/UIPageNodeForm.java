@@ -347,6 +347,7 @@ public class UIPageNodeForm extends UIFormTabPane {
             } else {
                 node.setStartPublicationTime(-1);
                 node.setEndPublicationTime(-1);
+                node.setPrivateTillPublicationDate(false);
             }
         }
 

@@ -50,8 +50,11 @@ import org.exoplatform.portal.webui.workspace.UIWorkingWorkspace;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.core.UIComponent;
+import org.exoplatform.webui.core.UIPopupMessages;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
+import org.gatein.common.logging.Logger;
+import org.gatein.common.logging.LoggerFactory;
 
 /**
  * Just a class that contains the Page related action listeners
@@ -60,6 +63,9 @@ import org.exoplatform.webui.event.EventListener;
  * @version $Revision$
  */
 public class UIPageActionListener {
+    /** . */
+    private static final Logger log = LoggerFactory.getLogger(UIPageActionListener.class);
+
     public static class ChangeNodeActionListener extends EventListener<UIPortalApplication> {
         public void execute(Event<UIPortalApplication> event) throws Exception {
             PortalRequestContext pcontext = PortalRequestContext.getCurrentInstance();
@@ -104,6 +110,43 @@ public class UIPageActionListener {
                             // If path to node is invalid, get the default node instead of.
                             targetNode = userPortal.getDefaultPath(navigation, builder.build());
                         }
+                    }
+                }
+
+                if (targetNode != null) {
+                    // let's check if this node can be shown at this time
+                    long now = System.currentTimeMillis();
+                    long startPublicationTime = targetNode.getStartPublicationTime();
+                    long endPublicationTime = targetNode.getEndPublicationTime();
+                    boolean privateTillPublication = targetNode.isPrivateTillPublicationDate();
+                    UIPopupMessages messages = uiPortalApp.getUIPopupMessages();
+
+                    if (privateTillPublication && startPublicationTime > now) {
+                        if (log.isInfoEnabled()) {
+                            log.info("User "
+                                    +pcontext.getRemoteUser()
+                                    +" has tried to access a node ("
+                                    +targetNode.getURI()
+                                    +") that is not published yet.");
+                        }
+                        String key = "UIPageActionListener.msg.nodenotpublished";
+                        ApplicationMessage message = new ApplicationMessage(key , null, ApplicationMessage.WARNING);
+                        messages.addMessage(message);
+                        pcontext.sendRedirect(userPortal.getDefaultPath(navigation, builder.build()).getParent().getURI());
+                        return;
+                    } else if (privateTillPublication && endPublicationTime < now) {
+                        if (log.isInfoEnabled()) {
+                            log.info("User "
+                                    +pcontext.getRemoteUser()
+                                    +" has tried to access a node ("
+                                    +targetNode.getURI()
+                                    +") that has expired.");
+                        }
+                        String key = "UIPageActionListener.msg.nodeexpired";
+                        ApplicationMessage message = new ApplicationMessage(key , null, ApplicationMessage.WARNING);
+                        messages.addMessage(message);
+                        pcontext.sendRedirect(userPortal.getDefaultPath(navigation, builder.build()).getParent().getURI());
+                        return;
                     }
                 }
             }

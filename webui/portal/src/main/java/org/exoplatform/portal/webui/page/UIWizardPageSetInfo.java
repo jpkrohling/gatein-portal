@@ -86,6 +86,8 @@ public class UIWizardPageSetInfo extends UIForm {
 
     public static final String END_PUBLICATION_DATE = "endPublicationDate";
 
+    public static final String PRIVATE_TILL_PUBLICATION_DATE = "privateTillPublicationDate";
+
     public static final String I18N_LABEL = "i18nizedLabel";
 
     private static final String LANGUAGES = "languages";
@@ -108,6 +110,7 @@ public class UIWizardPageSetInfo extends UIForm {
         UICheckBoxInput uiDateInputCheck = new UICheckBoxInput(SHOW_PUBLICATION_DATE, null, false);
         UICheckBoxInput uiVisibleCheck = new UICheckBoxInput(VISIBLE, null, false);
         UICheckBoxInput uiSwitchLabelMode = new UICheckBoxInput(SWITCH_MODE, null, true);
+        UICheckBoxInput uiPrivateTillPublicationDate = new UICheckBoxInput(PRIVATE_TILL_PUBLICATION_DATE, null, false);
         uiDateInputCheck.setOnChange("SwitchPublicationDate");
         uiVisibleCheck.setOnChange("SwitchVisible");
         uiSwitchLabelMode.setOnChange(SWITCH_MODE_ONCHANGE);
@@ -133,6 +136,7 @@ public class UIWizardPageSetInfo extends UIForm {
                 .addValidator(DateTimeValidator.class);
         addUIFormInput(startPubDateInput);
         addUIFormInput(endPubDateInput);
+        addUIFormInput(uiPrivateTillPublicationDate);
 
         boolean isUserNav = Util.getUIPortal().getSiteType().equals(SiteType.USER);
         if (isUserNav) {
@@ -140,6 +144,7 @@ public class UIWizardPageSetInfo extends UIForm {
             uiDateInputCheck.setRendered(false);
             startPubDateInput.setRendered(false);
             endPubDateInput.setRendered(false);
+            uiPrivateTillPublicationDate.setRendered(false);
         }
 
         this.selectedLocale = getUIFormSelectBox(LANGUAGES).getValue();
@@ -196,6 +201,8 @@ public class UIWizardPageSetInfo extends UIForm {
         cal = getUIFormDateTimeInput(END_PUBLICATION_DATE).getCalendar();
         time = (cal != null) ? cal.getTimeInMillis() : -1;
         node.setEndPublicationTime(time);
+
+        node.setPrivateTillPublicationDate(getUICheckBoxInput(PRIVATE_TILL_PUBLICATION_DATE).isChecked());
     }
 
     public UserNode createUserNode(UserNode parent) throws Exception {
@@ -217,6 +224,7 @@ public class UIWizardPageSetInfo extends UIForm {
     public void setShowPublicationDate(boolean show) {
         getUIFormDateTimeInput(START_PUBLICATION_DATE).setRendered(show);
         getUIFormDateTimeInput(END_PUBLICATION_DATE).setRendered(show);
+        getUICheckBoxInput(PRIVATE_TILL_PUBLICATION_DATE).setRendered(show);
     }
 
     public UserNode getSelectedPageNode() {
@@ -358,6 +366,7 @@ public class UIWizardPageSetInfo extends UIForm {
             boolean isCheck = uiForm.getUICheckBoxInput(SHOW_PUBLICATION_DATE).isChecked();
             uiForm.getUIFormDateTimeInput(START_PUBLICATION_DATE).setRendered(isCheck);
             uiForm.getUIFormDateTimeInput(END_PUBLICATION_DATE).setRendered(isCheck);
+            uiForm.getUICheckBoxInput(PRIVATE_TILL_PUBLICATION_DATE).setRendered(isCheck);
             UIWizard uiWizard = uiForm.getAncestorOfType(UIWizard.class);
             event.getRequestContext().addUIComponentToUpdateByAjax(uiWizard);
         }

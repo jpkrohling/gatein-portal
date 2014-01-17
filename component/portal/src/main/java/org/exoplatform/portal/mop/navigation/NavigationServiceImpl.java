@@ -593,6 +593,9 @@ public class NavigationServiceImpl implements NavigationService {
             visible.setEndPublicationDate(state.getEndPublicationDate());
 
             //
+            visible.setPrivateTillPublicationDate(state.isPrivateTillPublicationDate());
+
+            //
             Attributes attrs = sourceNav.getAttributes();
             attrs.setValue(MappedAttributes.ICON, state.getIcon());
 

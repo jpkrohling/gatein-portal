@@ -46,4 +46,9 @@ public abstract class Visible {
 
     public abstract void setVisibility(Visibility visibility);
 
+    @Property(name = "gtn:privateTillPublicationDate")
+    public abstract boolean isPrivateTillPublicationDate();
+
+    public abstract void setPrivateTillPublicationDate(boolean privateTillPublicationDate);
+
 }

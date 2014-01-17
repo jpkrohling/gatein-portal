@@ -85,11 +85,13 @@ class NodeData implements Serializable {
         Visibility visibility = Visibility.DISPLAYED;
         Date startPublicationDate = null;
         Date endPublicationDate = null;
+        boolean privateTillPublicationDate = false;
         if (navigation.isAdapted(Visible.class)) {
             Visible visible = navigation.adapt(Visible.class);
             visibility = visible.getVisibility();
             startPublicationDate = visible.getStartPublicationDate();
             endPublicationDate = visible.getEndPublicationDate();
+            privateTillPublicationDate = visible.isPrivateTillPublicationDate();
         }
 
         //
@@ -110,7 +112,8 @@ class NodeData implements Serializable {
         //
         NodeState state = new NodeState(label, attrs.getValue(MappedAttributes.ICON),
                 startPublicationDate != null ? startPublicationDate.getTime() : -1,
-                endPublicationDate != null ? endPublicationDate.getTime() : -1, visibility, pageRef);
+                endPublicationDate != null ? endPublicationDate.getTime() : -1, visibility, pageRef,
+                privateTillPublicationDate);
 
         //
         String parentId;

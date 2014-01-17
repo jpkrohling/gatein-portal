@@ -124,6 +124,18 @@ public class UserNode {
         context.setState(new NodeState.Builder(context.getState()).startPublicationTime(startPublicationTime).build());
     }
 
+    public boolean isPrivateTillPublicationDate() {
+        return context.getState().isPrivateTillPublicationDate();
+    }
+
+    public void setPrivateTillPublicationDate(boolean privateTillPublicationDate) {
+        context.setState(
+                new NodeState.Builder(context.getState())
+                        .privateTillPublicationDate(privateTillPublicationDate)
+                        .build()
+        );
+    }
+
     public long getEndPublicationTime() {
         return context.getState().getEndPublicationTime();
     }

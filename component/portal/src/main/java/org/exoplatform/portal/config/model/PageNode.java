@@ -54,6 +54,8 @@ public class PageNode extends PageNodeContainer {
     /** . */
     private String pageReference;
 
+    private boolean privateTillPublicationDate;
+
     public PageNode() {
     }
 
@@ -164,11 +166,20 @@ public class PageNode extends PageNodeContainer {
     public NodeState getState() {
         return new NodeState(labels.getSimple(), icon, startPublicationDate == null ? -1 : startPublicationDate.getTime(),
                 endPublicationDate == null ? -1 : endPublicationDate.getTime(), visibility,
-                pageReference != null ? PageKey.parse(pageReference) : null);
+                pageReference != null ? PageKey.parse(pageReference) : null,
+                privateTillPublicationDate);
     }
 
     @Override
     public String toString() {
         return "PageNode[" + name + "]";
+    }
+
+    public boolean isPrivateTillPublicationDate() {
+        return privateTillPublicationDate;
+    }
+
+    public void setPrivateTillPublicationDate(boolean privateTillPublicationDate) {
+        this.privateTillPublicationDate = privateTillPublicationDate;
     }
 }

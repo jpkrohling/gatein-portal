@@ -237,6 +237,14 @@ public class TreeNode implements NodeChangeListener<UserNode> {
         node.setEndPublicationTime(endPublicationTime);
     }
 
+    public boolean isPrivateTillPublicationDate() {
+        return node.isPrivateTillPublicationDate();
+    }
+
+    public void setPrivateTillPublicationDate(boolean isPrivateTillPublicationDate) {
+        node.setPrivateTillPublicationDate(isPrivateTillPublicationDate);
+    }
+
     public void setPageRef(String pageRef) {
         node.setPageRef(pageRef != null ? PageKey.parse(pageRef) : null);
     }

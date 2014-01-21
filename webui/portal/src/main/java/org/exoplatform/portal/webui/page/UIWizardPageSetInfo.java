@@ -367,6 +367,7 @@ public class UIWizardPageSetInfo extends UIForm {
             uiForm.getUIFormDateTimeInput(START_PUBLICATION_DATE).setRendered(isCheck);
             uiForm.getUIFormDateTimeInput(END_PUBLICATION_DATE).setRendered(isCheck);
             uiForm.getUICheckBoxInput(PRIVATE_TILL_PUBLICATION_DATE).setRendered(isCheck);
+            uiForm.getUICheckBoxInput(PRIVATE_TILL_PUBLICATION_DATE).setChecked(isCheck);
             UIWizard uiWizard = uiForm.getAncestorOfType(UIWizard.class);
             event.getRequestContext().addUIComponentToUpdateByAjax(uiWizard);
         }

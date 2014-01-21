@@ -119,34 +119,17 @@ public class UIPageActionListener {
                     long startPublicationTime = targetNode.getStartPublicationTime();
                     long endPublicationTime = targetNode.getEndPublicationTime();
                     boolean privateTillPublication = targetNode.isPrivateTillPublicationDate();
-                    UIPopupMessages messages = uiPortalApp.getUIPopupMessages();
 
-                    if (privateTillPublication && startPublicationTime > now) {
+                    if ((privateTillPublication && startPublicationTime > now) ||
+                            (privateTillPublication && endPublicationTime < now && endPublicationTime > 0)) {
                         if (log.isInfoEnabled()) {
                             log.info("User "
                                     +pcontext.getRemoteUser()
                                     +" has tried to access a node ("
                                     +targetNode.getURI()
-                                    +") that is not published yet.");
+                                    +") which is outside of the publishing window and is restricted.");
                         }
-                        String key = "UIPageActionListener.msg.nodenotpublished";
-                        ApplicationMessage message = new ApplicationMessage(key , null, ApplicationMessage.WARNING);
-                        messages.addMessage(message);
-                        pcontext.sendRedirect(userPortal.getDefaultPath(navigation, builder.build()).getParent().getURI());
-                        return;
-                    } else if (privateTillPublication && endPublicationTime < now && endPublicationTime > 0) {
-                        if (log.isInfoEnabled()) {
-                            log.info("User "
-                                    +pcontext.getRemoteUser()
-                                    +" has tried to access a node ("
-                                    +targetNode.getURI()
-                                    +") that has expired.");
-                        }
-                        String key = "UIPageActionListener.msg.nodeexpired";
-                        ApplicationMessage message = new ApplicationMessage(key , null, ApplicationMessage.WARNING);
-                        messages.addMessage(message);
-                        pcontext.sendRedirect(userPortal.getDefaultPath(navigation, builder.build()).getParent().getURI());
-                        return;
+                        targetNode = userPortal.getDefaultPath(navigation, builder.build());
                     }
                 }
             }

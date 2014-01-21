@@ -155,7 +155,7 @@ public class UIPageNodeForm extends UIFormTabPane {
                 .addUIFormInput(
                         new UIFormDateTimeInput(START_PUBLICATION_DATE, null, null).addValidator(DateTimeValidator.class))
                 .addUIFormInput(new UIFormDateTimeInput(END_PUBLICATION_DATE, null, null).addValidator(DateTimeValidator.class))
-                .addUIFormInput(new UICheckBoxInput(PRIVATE_TILL_PUBLICATION_DATE, null, false));
+                .addUIFormInput(new UICheckBoxInput(PRIVATE_TILL_PUBLICATION_DATE, null, true));
 
         addUIFormInput(uiSettingSet);
         setSelectedTab(uiSettingSet.getId());

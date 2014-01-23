@@ -50,7 +50,6 @@ import org.exoplatform.portal.webui.workspace.UIWorkingWorkspace;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.core.UIComponent;
-import org.exoplatform.webui.core.UIPopupMessages;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.gatein.common.logging.Logger;
@@ -118,10 +117,10 @@ public class UIPageActionListener {
                     long now = System.currentTimeMillis();
                     long startPublicationTime = targetNode.getStartPublicationTime();
                     long endPublicationTime = targetNode.getEndPublicationTime();
-                    boolean privateTillPublication = targetNode.isPrivateTillPublicationDate();
+                    boolean restrictOutsidePublicationWindow = targetNode.isRestrictOutsidePublicationWindow();
 
-                    if ((privateTillPublication && startPublicationTime > now) ||
-                            (privateTillPublication && endPublicationTime < now && endPublicationTime > 0)) {
+                    if ((restrictOutsidePublicationWindow && startPublicationTime > now) ||
+                            (restrictOutsidePublicationWindow && endPublicationTime < now && endPublicationTime > 0)) {
                         if (log.isInfoEnabled()) {
                             log.info("User "
                                     +pcontext.getRemoteUser()

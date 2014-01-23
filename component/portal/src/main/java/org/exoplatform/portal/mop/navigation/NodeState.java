@@ -61,7 +61,7 @@ public final class NodeState implements Serializable {
         private PageKey pageRef;
 
         /** . */
-        private boolean privateTillPublicationDate;
+        private boolean restrictOutsidePublicationWindow;
 
         public Builder() {
             this.icon = null;
@@ -70,7 +70,7 @@ public final class NodeState implements Serializable {
             this.endPublicationTime = -1;
             this.visibility = Visibility.DISPLAYED;
             this.pageRef = null;
-            this.privateTillPublicationDate = false;
+            this.restrictOutsidePublicationWindow = false;
         }
 
         /**
@@ -89,7 +89,7 @@ public final class NodeState implements Serializable {
             this.endPublicationTime = state.endPublicationTime;
             this.visibility = state.visibility;
             this.pageRef = state.pageRef;
-            this.privateTillPublicationDate = state.privateTillPublicationDate;
+            this.restrictOutsidePublicationWindow = state.restrictOutsidePublicationWindow;
         }
 
         public Builder label(String label) {
@@ -122,14 +122,14 @@ public final class NodeState implements Serializable {
             return this;
         }
 
-        public Builder privateTillPublicationDate(boolean privateTillPublicationDate) {
-            this.privateTillPublicationDate= privateTillPublicationDate;
+        public Builder restrictOutsidePublicationWindow(boolean restrictOutsidePublicationWindow) {
+            this.restrictOutsidePublicationWindow = restrictOutsidePublicationWindow;
             return this;
         }
 
         public NodeState build() {
             return new NodeState(label, icon, startPublicationTime, endPublicationTime, visibility, pageRef,
-                    privateTillPublicationDate);
+                    restrictOutsidePublicationWindow);
         }
     }
 
@@ -152,17 +152,17 @@ public final class NodeState implements Serializable {
     private final PageKey pageRef;
 
     /** . */
-    private final boolean privateTillPublicationDate;
+    private final boolean restrictOutsidePublicationWindow;
 
     public NodeState(String label, String icon, long startPublicationTime, long endPublicationTime, Visibility visibility,
-            PageKey pageRef, boolean privateTillPublicationDate) {
+            PageKey pageRef, boolean restrictOutsidePublicationWindow) {
         this.label = label;
         this.icon = icon;
         this.startPublicationTime = startPublicationTime;
         this.endPublicationTime = endPublicationTime;
         this.visibility = visibility;
         this.pageRef = pageRef;
-        this.privateTillPublicationDate = privateTillPublicationDate;
+        this.restrictOutsidePublicationWindow = restrictOutsidePublicationWindow;
     }
 
     public String getLabel() {
@@ -197,8 +197,8 @@ public final class NodeState implements Serializable {
         return pageRef;
     }
 
-    public boolean isPrivateTillPublicationDate() {
-        return privateTillPublicationDate;
+    public boolean isRestrictOutsidePublicationWindow() {
+        return restrictOutsidePublicationWindow;
     }
 
     @Override
@@ -213,7 +213,7 @@ public final class NodeState implements Serializable {
                     && Safe.equals(endPublicationTime, that.endPublicationTime)
                     && Safe.equals(visibility, that.visibility)
                     && Safe.equals(pageRef, that.pageRef)
-                    && Safe.equals(privateTillPublicationDate, that.privateTillPublicationDate);
+                    && Safe.equals(restrictOutsidePublicationWindow, that.restrictOutsidePublicationWindow);
         }
         return false;
     }
@@ -222,7 +222,7 @@ public final class NodeState implements Serializable {
     public String toString() {
         return "NodeState[label=" + label + ",icon=" + icon + ",startPublicationTime=" + startPublicationTime
                 + ",endPublicationTime=" + endPublicationTime + ",visibility=" + visibility + ",pageRef=" + pageRef
-                + ",privateTillPublicationDate=" + privateTillPublicationDate + "]";
+                + ",restrictOutsidePublicationWindow=" + restrictOutsidePublicationWindow + "]";
     }
 
     public Builder builder() {

@@ -86,7 +86,7 @@ public class UIWizardPageSetInfo extends UIForm {
 
     public static final String END_PUBLICATION_DATE = "endPublicationDate";
 
-    public static final String PRIVATE_TILL_PUBLICATION_DATE = "privateTillPublicationDate";
+    public static final String PRIVATE_TILL_PUBLICATION_DATE = "restrictOutsidePublicationWindow";
 
     public static final String I18N_LABEL = "i18nizedLabel";
 
@@ -202,7 +202,7 @@ public class UIWizardPageSetInfo extends UIForm {
         time = (cal != null) ? cal.getTimeInMillis() : -1;
         node.setEndPublicationTime(time);
 
-        node.setPrivateTillPublicationDate(getUICheckBoxInput(PRIVATE_TILL_PUBLICATION_DATE).isChecked());
+        node.setRestrictOutsidePublicationWindow(getUICheckBoxInput(PRIVATE_TILL_PUBLICATION_DATE).isChecked());
     }
 
     public UserNode createUserNode(UserNode parent) throws Exception {

@@ -129,6 +129,7 @@ public final class NodeState implements Serializable {
 
         public Builder restrictOutsidePublicationWindow(boolean restrictOutsidePublicationWindow) {
             this.restrictOutsidePublicationWindow = restrictOutsidePublicationWindow;
+            return this;
         }
 
         public Builder attributes(AttributesState attributes) {

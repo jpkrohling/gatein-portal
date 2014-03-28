@@ -9,8 +9,8 @@ DIRNAME=`dirname "$0"`
 
 # OS specific support (must be 'true' or 'false').
 cygwin=false;
-if  [ `uname|grep -i CYGWIN` ]; then
-    cygwin = true;
+if [ `uname|grep -i CYGWIN` ]; then
+cygwin = true;
 fi
 
 # For Cygwin, ensure paths are in UNIX format before anything is touched
@@ -29,9 +29,9 @@ if [ "x$JBOSS_HOME" = "x" ]; then
     # get the full path (without any relative bits)
     JBOSS_HOME=$RESOLVED_JBOSS_HOME
 else
- SANITIZED_JBOSS_HOME=`cd "$JBOSS_HOME"; pwd`
+SANITIZED_JBOSS_HOME=`cd "$JBOSS_HOME"; pwd`
  if [ "$RESOLVED_JBOSS_HOME" != "$SANITIZED_JBOSS_HOME" ]; then
-   echo "WARNING JBOSS_HOME may be pointing to a different installation - unpredictable results may occur."
+echo "WARNING JBOSS_HOME may be pointing to a different installation - unpredictable results may occur."
    echo ""
  fi
 fi
@@ -39,20 +39,20 @@ export JBOSS_HOME
 
 # Setup the JVM
 if [ "x$JAVA" = "x" ]; then
-    if [ "x$JAVA_HOME" != "x" ]; then
-        JAVA="$JAVA_HOME/bin/java"
+if [ "x$JAVA_HOME" != "x" ]; then
+JAVA="$JAVA_HOME/bin/java"
     else
-        JAVA="java"
+JAVA="java"
     fi
 fi
 
 if [ "x$JBOSS_MODULEPATH" = "x" ]; then
-    JBOSS_MODULEPATH="$JBOSS_HOME/modules/system/add-ons/gatein"
+    JBOSS_MODULEPATH="$JBOSS_HOME/modules/system/layers/gatein"
 fi
 
 # For Cygwin, switch paths to Windows format before running java
 if $cygwin; then
-    JBOSS_HOME=`cygpath --path --windows "$JBOSS_HOME"`
+JBOSS_HOME=`cygpath --path --windows "$JBOSS_HOME"`
     JAVA_HOME=`cygpath --path --windows "$JAVA_HOME"`
     JBOSS_CLASSPATH=`cygpath --path --windows "$JBOSS_CLASSPATH"`
     JBOSS_ENDORSED_DIRS=`cygpath --path --windows "$JBOSS_ENDORSED_DIRS"`

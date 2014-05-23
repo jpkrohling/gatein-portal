@@ -22,8 +22,13 @@
  ******************************************************************************/
 package org.jboss.portal.portlet.samples;
 
+import org.exoplatform.container.PortalContainer;
+import org.exoplatform.services.organization.OrganizationService;
+import org.exoplatform.services.organization.User;
+
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.security.Principal;
 
 import javax.portlet.GenericPortlet;
 import javax.portlet.RenderRequest;
@@ -33,7 +38,24 @@ import javax.portlet.RenderResponse;
 public class SimplestHelloWorldPortlet extends GenericPortlet {
     public void doView(RenderRequest request, RenderResponse response) throws IOException {
         PrintWriter writer = response.getWriter();
-        writer.write("Hello World !");
+
+        Principal principal = request.getUserPrincipal();
+        if (null != principal) {
+            System.out.println("Principal for this request: " + principal.getName());
+            writer.write("Hello " + principal.getName() +"!<br/>");
+            OrganizationService organizationService = PortalContainer.getInstance().getComponentInstanceOfType(OrganizationService.class);
+            try {
+                User user = organizationService.getUserHandler().findUserByName(principal.getName());
+                writer.write("User's display name: " + user.getDisplayName() + "<br/>");
+                writer.write("User's last login time: " + user.getLastLoginTime() + "<br/>");
+            } catch (Exception e) {
+                System.out.println("Got an exception while retrieving the user by name");
+            }
+        } else {
+            System.out.println("Principal is null");
+            writer.write("Hello world!");
+        }
+
         writer.close();
     }
 }

@@ -23,7 +23,11 @@
 
 package org.gatein.integration.wsrp;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStream;
+import java.util.Properties;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -90,6 +94,7 @@ import org.picocontainer.Startable;
 public class WSRPServiceIntegration implements Startable, WebAppListener {
     private static final Logger log = LoggerFactory.getLogger(WSRPServiceIntegration.class);
 
+    private static final String CONFIG_KEY_PORTAL_NAME_TO_BIND = "gatein.wsrp.consumer.bindToPortalName";
     private static final String DEFAULT_PRODUCER_CONFIG_LOCATION = "classpath:/conf/wsrp-producer-config.xml";
     private static final String DEFAULT_CONSUMERS_CONFIG_LOCATION = "classpath:/conf/wsrp-consumers-config.xml";
     private static final String PRODUCER_CONFIG_LOCATION = "producerConfigLocation";
@@ -116,7 +121,15 @@ public class WSRPServiceIntegration implements Startable, WebAppListener {
         // IMPORTANT: even though NodeHierarchyCreator is not used anywhere in the code, it's still needed for pico
         // to properly make sure that this service is started after the PC one. Yes, Pico is crap. :/
 
-        if ("portal".equals(context.getName())) {
+        // BZ1122527 - workaround, so that custom portals can use remote portlets
+        // TODO: a proper solution for this is required
+        String portalToBind = getPortalNameToBind();
+        if (null == portalToBind) {
+            // fall back to the original value
+            portalToBind = "portal";
+        }
+
+        if (portalToBind.equals(context.getName())) {
             if (params != null) {
                 producerConfigLocation = computePath(params.getValueParam(PRODUCER_CONFIG_LOCATION).getValue());
                 consumersConfigLocation = computePath(params.getValueParam(CONSUMERS_CONFIG_LOCATION).getValue());
@@ -431,5 +444,25 @@ public class WSRPServiceIntegration implements Startable, WebAppListener {
                 }
             }
         }
+    }
+
+    private static String getPortalNameToBind() {
+        String portalNameToBind = null;
+        String gateinConfDir = System.getProperty("gatein.conf.dir");
+        File conf = new File(gateinConfDir, "configuration.properties");
+        if (conf.exists()) {
+            try {
+                Properties properties = new Properties();
+                properties.load(new FileInputStream(conf));
+                if (properties.containsKey(CONFIG_KEY_PORTAL_NAME_TO_BIND)) {
+                    portalNameToBind = (String) properties.get(CONFIG_KEY_PORTAL_NAME_TO_BIND);
+                }
+            } catch (IOException e) {
+                log.info(e.getLocalizedMessage());
+                log.debug(e);
+            }
+        }
+
+        return portalNameToBind;
     }
 }

@@ -751,6 +751,7 @@
     <dependency>
       <groupId>org.jasig.cas.client</groupId>
       <artifactId>cas-client-core</artifactId>
+      <version>3.3.3</version>
     </dependency>
 
     <!-- GateIn OAuth -->

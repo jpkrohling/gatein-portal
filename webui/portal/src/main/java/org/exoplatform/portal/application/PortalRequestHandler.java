@@ -22,6 +22,7 @@ package org.exoplatform.portal.application;
 import java.util.List;
 import java.util.Locale;
 import java.util.ServiceLoader;
+import java.util.regex.Pattern;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.http.HttpServletRequest;
@@ -71,6 +72,9 @@ public class PortalRequestHandler extends WebRequestHandler {
 
     /** . */
     public static final QualifiedName LANG = QualifiedName.create("gtn", "lang");
+
+    /** Used to sanitize the CacheControl HTTP header */
+    private static final Pattern CACHE_CONTROL_SANITIZE_PATTERN = Pattern.compile("[\\r\\n]");
 
     static {
         ServiceLoader<PortalApplicationFactory> loader = ServiceLoader.load(PortalApplicationFactory.class);
@@ -290,6 +294,9 @@ public class PortalRequestHandler extends WebRequestHandler {
     }
 
     public String getSanitizedCacheControl(String cacheControl) {
-        return cacheControl.replaceAll("[\\r\\n]", "");
+        if (null == cacheControl) {
+            return null;
+        }
+        return CACHE_CONTROL_SANITIZE_PATTERN.matcher(cacheControl).replaceAll("");
     }
 }
